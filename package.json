@@ -1,0 +1,33 @@
+{
+  "name": "strapi-provider-firebase-storage",
+  "version": "1.0.0",
+  "description": "A storage provider for the Strapi CMS that manages file uploads to Firebase Storage",
+  "main": "dist/index.js",
+  "directories": {
+    "lib": "./lib"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shadow1349/strapi-provider-firebase-storage.git"
+  },
+  "keywords": [
+    "Strapi",
+    "Firebase"
+  ],
+  "author": "Sam Redmond",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shadow1349/strapi-provider-firebase-storage/issues"
+  },
+  "homepage": "https://github.com/shadow1349/strapi-provider-firebase-storage#readme",
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "firebase-admin": "^11.4.1"
+  }
+}

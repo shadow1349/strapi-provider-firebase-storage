@@ -1,0 +1,4 @@
+# Ignore the dependencies directory
+node_modules
+# Ignore the build directory
+dist
