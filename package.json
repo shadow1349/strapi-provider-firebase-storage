@@ -15,7 +15,8 @@
   },
   "keywords": [
     "Strapi",
-    "Firebase"
+    "Firebase",
+    "Firebase Storage"
   ],
   "author": "Sam Redmond",
   "license": "MIT",
