@@ -1,6 +1,6 @@
 {
   "name": "strapi-provider-firebase-storage",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A storage provider for the Strapi CMS that manages file uploads to Firebase Storage",
   "main": "dist/index.js",
   "directories": {
@@ -29,6 +29,7 @@
     "typescript": "^4.9.4"
   },
   "dependencies": {
-    "firebase-admin": "^11.4.1"
+    "firebase-admin": "^11.4.1",
+    "uuid": "^9.0.0"
   }
 }

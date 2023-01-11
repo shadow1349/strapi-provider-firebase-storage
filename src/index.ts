@@ -1,5 +1,6 @@
 import * as admin from "firebase-admin";
 import * as path from "path";
+import { v4 } from "uuid";
 
 module.exports = {
   init(config) {
@@ -97,10 +98,17 @@ module.exports = {
         const fileURL = `https://storage.googleapis.com/${config.bucket}/${fileRef.name}`;
         print("FILE URL: ", fileURL);
 
+        const metadata = {
+          metadata: {
+            firebaseStorageDownloadTokens: v4(),
+          },
+        };
+
         if (file.stream) {
           const writeStream = fileRef.createWriteStream({
             public: true,
             contentType: file.mime,
+            metadata,
           });
 
           file.stream
@@ -130,6 +138,7 @@ module.exports = {
             {
               public: true,
               contentType: file.mime,
+              metadata,
             },
             async (error) => {
               if (error) {
