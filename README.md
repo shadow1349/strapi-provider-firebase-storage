@@ -12,6 +12,41 @@ This is a Strapi provider that will upload your files to Firebase Storage.
 npm install strapi-provider-firebase-storage
 ```
 
+## Note on CORS options
+
+You may run into an issue displaying the image where CORS is blocking it. If that happens open `./config/middwares.js` and replace `strapi::security` with this:
+
+```
+{
+  name: "strapi::security",
+  config: {
+    contentSecurityPolicy: {
+      useDefaults: true,
+      directives: {
+        "connect-src": ["'self'", "https:"],
+        "img-src": [
+          "'self'",
+          "data:",
+          "blob:",
+          "storage.googleapis.com",
+          "dl.airtable.com",
+        ],
+        "media-src": [
+          "'self'",
+          "data:",
+          "blob:",
+          "storage.googleapis.com",
+          "dl.airtable.com",
+        ],
+        upgradeInsecureRequests: null,
+      },
+    },
+  },
+},
+```
+
+It will whitelabel images coming from Google Cloud Storage in the CORS settings.
+
 # Usage
 
 Here is a sample usage:
