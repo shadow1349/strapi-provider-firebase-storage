@@ -6,6 +6,12 @@
 
 This is a Strapi provider that will upload your files to Firebase Storage.
 
+# Installation 
+
+```
+npm install strapi-provider-firebase-storage
+```
+
 # Usage
 
 Here is a sample usage:
