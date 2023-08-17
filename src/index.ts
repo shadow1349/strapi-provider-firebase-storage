@@ -197,19 +197,23 @@ module.exports = {
       delete: (file: File) =>
         new Promise((resolve, reject) => {
           const fileRef = getFileRef(file);
-
-          fileRef
-            .delete()
-            .then(() => {
-              print("\n\n");
-              // Resolve just markes that the delete is complete
-              resolve("");
+          fileRef.exists().then(([exists])=>{
+            if(!exists){
+              return resolve("");
+            }
+            fileRef
+              .delete()
+              .then(() => {
+                print("\n\n");
+                // Resolve just markes that the delete is complete
+                resolve("");
+              })
+              .catch((error) => {
+                if (config.debug) console.error(error);
+                print("\n\n");
+                reject(error);
+              });
             })
-            .catch((error) => {
-              if (config.debug) console.error(error);
-              print("\n\n");
-              reject(error);
-            });
         }),
     };
   },
