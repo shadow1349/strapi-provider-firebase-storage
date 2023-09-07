@@ -1,9 +1,38 @@
 import * as admin from "firebase-admin";
 import * as path from "path";
 import { v4 } from "uuid";
+import {ReadStream} from 'fs';
+import {ServiceAccount} from 'firebase-admin/lib/app/credential';
+
+interface File {
+  name: string;
+  alternativeText?: string;
+  caption?: string;
+  width?: number;
+  height?: number;
+  formats?: Record<string, unknown>;
+  hash: string;
+  ext?: string;
+  mime: string;
+  size: number;
+  url: string;
+  previewUrl?: string;
+  path?: string;
+  provider?: string;
+  provider_metadata?: Record<string, unknown>;
+  stream?: ReadStream;
+  buffer?: Buffer;
+}
+
+interface InitOptions {
+  serviceAccount: string | ServiceAccount;
+  bucket:string;
+  sortInStorage?:boolean;
+  debug?:boolean;
+}
 
 module.exports = {
-  init(config) {
+  init(config: InitOptions) {
     admin.initializeApp({
       credential: admin.credential.cert(config.serviceAccount),
       // If you have a custom bucket this will set that bucket
@@ -73,7 +102,7 @@ module.exports = {
     /**
      * We need the file ref for all functions so it makes sense to get that here.
      */
-    function getFileRef(file) {
+    function getFileRef(file: File) {
       const fileName = `${file.hash}${file.ext}`;
       print("FILE NAME: ", fileName);
 
@@ -91,7 +120,7 @@ module.exports = {
       return bucket.file(config.sortInStorage ? fullFilePath : fileName);
     }
 
-    const upload = (file) =>
+    const upload = (file: File) =>
       new Promise((resolve, reject) => {
         const fileRef = getFileRef(file);
 
@@ -163,24 +192,28 @@ module.exports = {
 
     return {
       // We can have 1 function that handles file streams and buffers
-      upload: (file) => upload(file),
-      uploadStream: (file) => upload(file),
-      delete: (file) =>
+      upload: (file: File) => upload(file),
+      uploadStream: (file: File) => upload(file),
+      delete: (file: File) =>
         new Promise((resolve, reject) => {
           const fileRef = getFileRef(file);
-
-          fileRef
-            .delete()
-            .then(() => {
-              print("\n\n");
-              // Resolve just markes that the delete is complete
-              resolve("");
+          fileRef.exists().then(([exists])=>{
+            if(!exists){
+              return resolve("");
+            }
+            fileRef
+              .delete()
+              .then(() => {
+                print("\n\n");
+                // Resolve just markes that the delete is complete
+                resolve("");
+              })
+              .catch((error) => {
+                if (config.debug) console.error(error);
+                print("\n\n");
+                reject(error);
+              });
             })
-            .catch((error) => {
-              if (config.debug) console.error(error);
-              print("\n\n");
-              reject(error);
-            });
         }),
     };
   },
