@@ -17,7 +17,6 @@ jobs:
           node-version: 16
       - run: npm install
       - run: npm run build
-      - run: echo "Name: ${{ github.event.release.name }} Description: ${{ github.event.release.body }}"
       - uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
